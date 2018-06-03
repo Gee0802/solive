@@ -1,0 +1,38 @@
+{% extends "subbase.html" %}
+{%- from "wtf.html" import form_field, quick_form %}
+{% block container %}
+<div class="settings-panel">
+    <ul class="nav nav-tabs settings-nav">
+        <li class="active"><a href="#modify-info" data-toggle="tab">修改资料</a></li>
+        <li><a href="#modify-password" data-toggle="tab">修改密码</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="modify-info">
+            <form action="" method="post" class="form" enctype="multipart/form-data" role="form">
+                <div class="show-avatar">
+                    <img src="/static/img/avatar/{{ current_user.avatar }}" alt="头像">
+                </div>
+                <div class="avatar-control{% if info_form.avatar.errors %} has-error{% endif %}">
+                    <label class="file-btn" for="avatar">上传头像</label>
+                    {%- if info_form.nickname.errors %}
+                    <p class="help-block" style="display: inline-block;">{{ info_form.avatar.errors }}</p>
+                    {% endif -%}
+                    {{ info_form.avatar(id="avatar", style="display: none;") }}
+                    <div class="tips">jpg或png格式，最大3MB，不支持gif</div>
+                </div>
+                <div class="form-group{% if info_form.nickname.errors %} has-error{% endif %}" style="clear: both;">
+                    {{ info_form.nickname.label(class="control-label") }}
+                    {{ info_form.nickname(class="form-control", id="nickname") }}
+                    {%- if info_form.nickname.errors %}
+                    <p class="help-block">{{ info_form.nickname.errors }}</p>
+                    {% endif -%}
+                </div>
+                {{ form_field(info_form.submit_info) }}
+            </form>
+        </div>
+        <div class="tab-pane" id="modify-password">
+            {{ quick_form(password_form, id="modify-passwd") }}
+        </div>
+    </div>
+</div>
+{% endblock %}

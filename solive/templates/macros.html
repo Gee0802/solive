@@ -1,0 +1,19 @@
+{% macro render_video(video) %}
+<div class="video-box">
+    <a href="{{ video.room }}" class="thumbnail">
+        <div class="video-cover">
+            <img src="{{ video.cover }}" referrerPolicy="no-referrer">
+        </div>
+        <div class="video-info">
+            <span class="video-title" title="{{ video.title }}">{{ video.title }}</span>
+            <span class="video-number" title="{{ video.viewers_num }}"><i class="glyphicon glyphicon-eye-open"></i>{{ video.viewers_num }}</span>
+            <span class="video-nickname" title="{{ video.nickname }}">{{ video.nickname }}</span>
+            <span class="video-category" title="{{ video.cate }}">{{ video.cate }}</span>
+            <span class="video-source" title="{{ video.source }}直播">{{ video.source }}直播</span>
+        </div>
+    </a>
+    <a href="###" class="video-favorite" data-room="{{ video.room }}">
+        {%- if video in current_user.favorite %}取消收藏{% else %}添加收藏{% endif -%}
+    </a>
+</div>
+{% endmacro %}

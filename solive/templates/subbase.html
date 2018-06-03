@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<input id="toggleSidebarCheck" type="checkbox" style="display: none;">
+<div class="sidebar">
+    {% if current_user.is_authenticated %}
+    <div class="user-info">
+        <div class="square">
+            <img src="/static/img/avatar/{{ current_user.avatar }}" class="avatar">
+        </div>
+        <div class="user-name">
+            <a href="#">{{ current_user.nickname }}</a>
+        </div>
+        <div class="level">
+            <div>lv{{ current_user.level }}:</div>
+            <div class="progress">
+                <span class="progress-bar progress-bar-danger"
+                      style="width: {{ current_user.current_level_exp / current_user.exp_to_level_up * 100 }}%;"></span>
+            </div>
+            <div>{{ current_user.current_level_exp }} / {{ current_user.exp_to_level_up }}</div>
+        </div>
+        <div class="user-options">
+            <a href="{{ url_for('main.user_history') }}"><span class="glyphicon glyphicon-time"></span>观看历史</a>
+            <a href="{{ url_for('main.user_favorite') }}"><span class="glyphicon glyphicon-star"></span>我的收藏</a>
+            <a href="{{ url_for('user.settings') }}"><span class="glyphicon glyphicon-edit"></span>资料设置</a>
+            <a href="#"><span class="glyphicon glyphicon-off"></span>退出登录</a>
+        </div>
+    </div>
+    {% endif %}
+    <ul class="nav nav-pills nav-stacked">
+        <li><a href="{{ url_for('main.all') }}"><span class="glyphicon glyphicon-expand" style="padding-right: 8%;"></span>全部直播</a></li>
+        <li><a href="{{ url_for('main.cate') }}"><span class="glyphicon glyphicon-th-large" style="padding-right: 8%;"></span>全部分类</a></li>
+    </ul>
+    <div class="sidebar-recommend">
+        <div class="sidebar-recommend-title">
+            <span>推荐分类</span>
+        </div>
+        <ul class="sidebar-recommend-cate">
+            {%- for item in config.GLOBAL_TEMPLATE_ARGS['recommend'] %}
+            <li><a href="/cate/{{ cate_url_mappings[item] }}">{{ item }}<span class="badge">HOT</span></a></li>
+            {% endfor -%}
+        </ul>
+    </div>
+    <div class="sidebar-categories">
+        {%- for category, lst in categories.items() %}
+        <div class="sidebar-category">
+            <div class="sidebar-category-name">
+                <a href="#">{{ category }}</a>
+                <div class="triangle-btn" data-toggle="collapse" data-target="#cate-{{ loop.index }}">
+                    <span class="caret"></span>
+                </div>
+            </div>
+            <div class="collapse sidebar-subcate" id="cate-{{ loop.index }}">
+                {%- for item in lst %}
+                <a href="{{ cate_url_mappings[item] }}">{{ item }}</a>
+                {% endfor -%}
+            </div>
+        </div>
+        {% endfor -%}
+    </div>
+</div>
+<div class="sidebar-control">
+    <label for="toggleSidebarCheck" class="rotated-arrow"></label>
+    <label for="toggleSidebarCheck" class="click-zone"></label>
+</div>
+<div class="right-container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% block container %}
+    {% endblock %}
+</div>
+{% endblock %}

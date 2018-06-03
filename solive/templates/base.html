@@ -1,0 +1,55 @@
+{% extends "bootbase.html" %}
+{% block title %}{{title|f}}solive-搜直播{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <link href="/static/css/solive.css" rel="stylesheet">
+{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Solive</a>
+        </div>
+        <div id="collapse-top" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">首页</a></li>
+                <li><a href="{{ url_for('main.all') }}">全部</a></li>
+                <li><a href="{{ url_for('main.cate') }}">分类</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="navbar-form">
+                    <form action="{{ url_for('main.search') }}" method="get" class="input-group" id="keyword-form">
+                        <input type="text" class="form-control" id="keyword" name="keyword" placeholder="搜索">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default" id="search">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+                <li><a href="javascript:" onclick="event.preventDefault();" data-toggle="modal" data-target="#register-modal">注册</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('auth.logout') }}">注销</a></li>
+                {% else %}
+                <li><a href="javascript:" data-toggle="modal" data-target="#login-modal">登录</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="/static/js/solive.js"></script>
+{% endblock %}
+{% block modal %}
+{% import "modal.html" as m with context %}
+    {{ m.render_modal() }}
+    {{ m.render_modal(modal_type='register-modal') }}
+{% endblock %}

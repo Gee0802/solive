@@ -1,0 +1,13 @@
+{% extends "subbase.html" %}
+{% from "macros.html" import render_video with context %}
+{% block container %}
+<div class="video-container">
+    {% with videos=pagination.items %}
+    {% for video in videos %}
+        {{ render_video(video) }}
+    {% endfor %}
+    {% endwith %}
+</div>
+{%- from "pagination.html" import render_pagination %}
+    {{ render_pagination(pagination) }}
+{% endblock %}

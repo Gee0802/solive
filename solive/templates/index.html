@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% from "macros.html" import render_video with context %}
+{% block content %}
+<div class="solive-container" style="padding-top: 70px;">
+    <div class="row">
+        <div class="col-sm-7 col-xs-7">
+            <div id="room-carousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    {%- for i in range(5) %}
+                    <li data-target="#room-carousel" data-slide-to="{{ i }}"{% if loop.first %} class="active"{% endif %}></li>
+                    {% endfor -%}
+                </ol>
+                <div class="carousel-inner">
+                    {%- for item in carousel %}
+                    <a href="{{ item.room }}" class="item{% if loop.first %} active{% endif %}">
+                        <img src="{{ item.cover }}" referrerPolicy="no-referrer">
+                        <div class="carousel-caption"><strong>{{ item.nickname }}：</strong>{{ item.title }}</div>
+                    </a>
+                    {% endfor -%}
+                </div>
+                <a class="left carousel-control" href="#room-carousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#room-carousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-5 col-xs-5">
+            <div class="source">
+                <p class="source-title">直播平台</p>
+                <ul class="source-list">
+                    {%- for item in lives_num_list %}
+                    <li><a href="{{ source_index_mappings[item.platform] }}">
+                        <img src="/static/img/logo/{{ item.platform }}.jpg">{{ url_source_mappings[item.platform] }}直播
+                        <span>{{ item.lives_num }}个直播</span></a></li>
+                    {% endfor -%}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="so-panel clearfix">
+        <div class="so-panel-header">
+            <span class="so-panel-title">So主播</span>
+            <form id="so-host-form" class="so-form">
+                <div class="so-form-group">
+                    <label for="so-host-source">平台</label>
+                    <select id="so-host-source" name="source" class="so-form-control">
+                        <option>全部</option>
+                        <option>斗鱼</option>
+                        <option>熊猫</option>
+                        <option>虎牙</option>
+                        <option>全民</option>
+                        <option>龙珠</option>
+                        <option>战旗</option>
+                        <option>bilibili</option>
+                    </select>
+                </div>
+                <div class="so-form-group">
+                    <label for="so-host-cate">分类</label>
+                    <select id="so-host-cate" name="cate" class="so-form-control">
+                        <option>全部</option>
+                        <option>英雄联盟</option>
+                        <option>绝地求生</option>
+                        <option>DNF</option>
+                        <option>王者荣耀</option>
+                        <option>穿越火线</option>
+                        <option>DOTA2</option>
+                        <option>炉石传说</option>
+                    </select>
+                </div>
+                <input type="submit" value="搜索">
+            </form>
+        </div>
+        <div class="so-panel-body">
+            <div class="so-list">
+                {%- for item in hosts %}
+                <a href="{{ item[0].room }}"{% if item[1] %} class="live"{% endif %}>
+                    <div class="host-name">
+                        <span title="{{ item[0].nickname }}">{{ item[0].nickname }}</span>
+                        {% if item[1] %}<i class="badge">live</i>{% endif %}
+                    </div>
+                    <span class="host-cate">{{ item[0].cate }}</span>
+                    <span class="host-source">{{ item[0].source }}</span>
+                </a>
+                {% endfor -%}
+            </div>
+        </div>
+    </div>
+    <div class="so-panel clearfix">
+        <div class="so-panel-header">
+            <span class="so-panel-title">So游戏</span>
+            {%- for label in so_labels['game'] %}
+            <label class="cate-label">{{ label }}</label>
+            {% endfor -%}
+        </div>
+        <div class="so-panel-body">
+            {%- for video in render_so['game'] %}
+                {{ render_video(video) }}
+            {% endfor -%}
+        </div>
+    </div>
+    <div class="so-panel clearfix">
+        <div class="so-panel-header">
+            <span class="so-panel-title">So娱乐</span>
+            {%- for label in so_labels['entertainment'] %}
+            <label class="cate-label">{{ label }}</label>
+            {% endfor -%}
+        </div>
+        <div class="so-panel-body">
+            {%- for video in render_so['entertainment'] %}
+                {{ render_video(video) }}
+            {% endfor -%}
+        </div>
+    </div>
+</div>
+{% endblock %}

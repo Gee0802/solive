@@ -1,0 +1,17 @@
+{% extends "subbase.html" %}
+{% block container %}
+<div class="video-container">
+    {%- for cate in aggregation %}
+        <div class="cate-box">
+            <a href="{{ url_for('main.show_cate', name=mappings[cate.parent_cate_name]) }}" class="thumbnail">
+                <img src="static/img/cate/{{ cate.parent_cate_name }}.jpg" alt="{{ cate.parent_cate_name }}">
+                <div class="cate-info">
+                    <span class="cate-name" title="{{ cate.parent_cate_name }}">{{ cate.parent_cate_name }}</span>
+                    <span class="cate-rooms" title="{{ cate.total_room }}">当前直播间个数：{{ cate.total_room }}</span>
+                    <span class="cate-viewers" title="{{ cate.total_num }}">当前观看人数：{{ cate.total_num }}</span>
+                </div>
+            </a>
+        </div>
+    {% endfor -%}
+</div>
+{% endblock %}

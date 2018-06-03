@@ -1,0 +1,32 @@
+{% macro render_modal(modal_type='login-modal') %}
+<div class="modal fade" id="{{ modal_type }}" data-backdrop="static">
+    <div class="modal-dialog" style="position: absolute; width: 360px; height: 356px;
+    top: 0; right: 0; bottom: 0; left: 0; margin: auto;">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: center; font-size: 21px;">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <span class="modal-title" style="color: #449d44;">
+                    {%- if modal_type == 'login-modal' %}登录{% else %}注册{% endif -%}
+                </span>
+            </div>
+            <div class="modal-body">
+                {% import 'wtf.html' as wtf %}
+                {%- if modal_type == 'login-modal' %}
+                {{ wtf.quick_form(login_form, id='login-form', action='/auth/login') }}
+                {% else %}
+                {{ wtf.quick_form(register_form, id='register-form', action='/auth/register') }}
+                {% endif -%}
+            </div>
+            <div class="modal-footer" style="text-align: center;">
+                {%- if modal_type == 'login-modal' %}
+                还没有账号？<a href="###" onclick="$('#login-modal').modal('hide');$('#register-modal').modal('show');">点此注册</a>
+                {% else %}
+                已有账号？<a href="###" onclick="$('#register-modal').modal('hide');$('#login-modal').modal('show');">立即登录</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
