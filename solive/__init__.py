@@ -1,12 +1,9 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from flask_moment import Moment
-from flask_login import LoginManager
 from flask_mail import Mail
 from pyecharts.conf import PyEchartsConfig
 from pyecharts.engine import ECHAERTS_TEMPLATE_FUNCTIONS
 
-from config import config
 from .exts import db, login_manager
 from .main import main as main_blueprint
 from .auth import auth as auth_blueprint
@@ -18,15 +15,15 @@ from .user import user as user_blueprint
 # the dictionary of flask extension instances
 ext_dict = dict(
     mail = Mail(),
-    moment = Moment(),
     bootstrap = Bootstrap()
 )
 globals().update(ext_dict)
 
+
 # Define the factory function of flask application.
-def create_app(config_name='default'):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config[config_name])
+    app.config.from_pyfile('../config.py')
     app.register_blueprint(main_blueprint)
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(api_blueprint, url_prefix='/api')

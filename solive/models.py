@@ -3,7 +3,7 @@ from flask_login import UserMixin
 import datetime
 
 from .exts import db, login_manager
-from .main.url_cate_mappings import SO_TIME, cate_url_mappings
+from config import SO_TIME
 
 
 favorites = db.Table('favorites',
@@ -83,7 +83,7 @@ class Video(db.Model):
     parent_cate_name = db.Column(db.String(32), db.ForeignKey('categories.name'))
 
     @staticmethod
-    def latest(obj, time_delta=5):
+    def latest(obj, time_delta=SO_TIME):
         """
         如果obj为类对象，该方法将返回一个SQL clause（没有定义常规的__bool__方法，因此bool（返回值）会报错：
         "Boolean value of this clause is not defined."），而不是一个逻辑表达式;
@@ -113,7 +113,7 @@ class Video(db.Model):
         }
 
     @staticmethod
-    def aggregate(cate=None, time_delta=5):
+    def aggregate(cate=None, time_delta=SO_TIME):
         if cate is None:
             subquery = db.session.query(Video.parent_cate_name, db.func.count('*').label('total_room'),
                                       db.func.sum(Video.viewers_num).label('total_num'))\
