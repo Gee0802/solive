@@ -12,3 +12,7 @@ gun_config.py
 migrations/
 bootstrap/
 supervisord.conf
+tasks.py
+celerybeat-schedule
+celerybeat.pid
+dump.rdb
