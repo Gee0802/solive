@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, jsonify
+from flask import url_for, flash, redirect, request, jsonify
 from flask_login import login_user, login_required, logout_user
 
 from . import auth
@@ -29,9 +29,10 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    print(request.referrer)
     logout_user()
     flash('您已退出登录！')
-    return redirect(url_for('main.index'))
+    return redirect(request.referrer or url_for('main.index'))
 
 
 @auth.route('/register', methods=['POST'])

@@ -1,21 +1,13 @@
-from flask import render_template, url_for, flash, redirect, request, abort, jsonify, current_app
+from flask import render_template, url_for, flash, redirect, request, abort, jsonify
 from flask_login import login_required, current_user
 from pyecharts import Bar
-import datetime
 import random
 import json
 
 from . import main
-from .url_cate_mappings import url_cate_mappings, cate_url_mappings, hot_hosts, so_labels, source_index_mappings, url_source_mappings
+from config import SO_TIME, HOT_HOSTS, URL_CATE_MAPPINGS, CATE_URL_MAPPINGS, SO_LABELS
 from ..exts import db
 from ..models import Video
-
-
-@main.before_request
-def before_request():
-    global config, SO_TIME
-    config = current_app.config
-    SO_TIME = config['SO_TIME']
 
 
 @main.route('/')
@@ -28,7 +20,7 @@ def index():
         lives_num_list = sorted(json.load(f), key=lambda x: x['lives_num'], reverse=True)
 
     # so主播数据
-    host_sample = random.sample(hot_hosts, 12)
+    host_sample = random.sample(HOT_HOSTS, 12)
     hosts = []
     for room in host_sample:
         host = Video.query.filter(Video.room == room).first()
@@ -41,10 +33,10 @@ def index():
     # so游戏、so娱乐数据
     render_so = {}
     render_so['game'] = Video.query.filter(Video.latest(Video, SO_TIME)) \
-                            .filter(Video.cate.in_(so_labels['game'])).order_by(Video.viewers_num.desc())[:8]
+                            .filter(Video.cate.in_(SO_LABELS['game'])).order_by(Video.viewers_num.desc())[:8]
     render_so['entertainment'] = Video.query.filter(Video.latest(Video, SO_TIME)) \
-                            .filter(Video.cate.in_(so_labels['entertainment'])).order_by(Video.viewers_num.desc())[:8]
-    return render_template('index.html', carousel=carousel, lives_num_list=lives_num_list,hosts=hosts,
+                            .filter(Video.cate.in_(SO_LABELS['entertainment'])).order_by(Video.viewers_num.desc())[:8]
+    return render_template('index.html', carousel=carousel, lives_num_list=lives_num_list, hosts=hosts,
                            render_so=render_so)
 
 
@@ -80,19 +72,19 @@ def cate():
     #     aggregation[v] = [res.total_room, res.total_num]
     aggregation = Video.aggregate(time_delta=SO_TIME)
     # TODO: 按照cate_url_mappings来排序：遍历aggregation，mappings[name] = item.
-    return render_template('cate.html', title='全部分类', mappings=cate_url_mappings, aggregation=aggregation)
+    return render_template('cate.html', title='全部分类', mappings=CATE_URL_MAPPINGS, aggregation=aggregation)
 
 
 @main.route('/cate/<string:name>')
 @main.route('/cate/<string:name>/<int:page>')
 def show_cate(name, page=1):
-    if name not in url_cate_mappings:
+    if name not in URL_CATE_MAPPINGS:
         flash('您访问的页面不存在！')
         return redirect(request.referrer or url_for('.cate'))
-    videos = Video.query.filter_by(parent_cate_name=url_cate_mappings[name]).filter(Video.latest(Video, SO_TIME))\
+    videos = Video.query.filter_by(parent_cate_name=URL_CATE_MAPPINGS[name]).filter(Video.latest(Video, SO_TIME))\
         .order_by(Video.viewers_num.desc())
     pagination = videos.paginate(page, 40, False)
-    return render_template('all.html', title=url_cate_mappings[name], pagination=pagination)
+    return render_template('all.html', title=URL_CATE_MAPPINGS[name], pagination=pagination)
 
 
 @main.route('/search')

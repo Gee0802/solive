@@ -1,5 +1,5 @@
-from solive.models import Video, Category
-from url_cate_mappings import mappings
+from solive.models import Category
+from config import URL_CATE_MAPPINGS
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -13,7 +13,7 @@ config = dict(
 app = Flask(__name__)
 app.config.from_mapping(config)
 db = SQLAlchemy(app)
-for name in mappings.values():
+for name in URL_CATE_MAPPINGS.values():
     cate = Category(name=name)
     db.session.add(cate)
     db.session.commit()

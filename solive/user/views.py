@@ -51,3 +51,18 @@ def password():
         return jsonify({'code': 200, 'message': 'success'})
     else:
         return jsonify({'code': 400, 'message': 'error', 'data': form.errors})
+
+
+@user.route('/history')
+def history():
+    if current_user.is_authenticated:
+        pagination = current_user.history.paginate(1, 40, False)
+        return render_template('history.html', title='观看历史', pagination=pagination)
+        # TODO
+
+
+@user.route('/favorite')
+def favorite():
+    if current_user.is_authenticated:
+        pagination = current_user.favorite.paginate(1, 40, False)
+        return render_template('favorite.html', title='我的收藏', pagination=pagination)
