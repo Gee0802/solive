@@ -7,14 +7,18 @@
             <div id="room-carousel" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     {%- for i in range(5) %}
-                    <li data-target="#room-carousel" data-slide-to="{{ i }}"{% if loop.first %} class="active"{% endif %}></li>
+                    <li data-target="#room-carousel" data-slide-to="{{ i }}"
+                            {%- if loop.first %} class="active"{% endif -%}>
+                    </li>
                     {% endfor -%}
                 </ol>
                 <div class="carousel-inner">
                     {%- for item in carousel %}
                     <a href="{{ item.room }}" class="item{% if loop.first %} active{% endif %}">
                         <img src="{{ item.cover }}" referrerPolicy="no-referrer">
-                        <div class="carousel-caption"><strong>{{ item.nickname }}：</strong>{{ item.title }}</div>
+                        <div class="carousel-caption">
+                            <strong>{{ item.nickname }}：</strong>{{ item.title }}
+                        </div>
                     </a>
                     {% endfor -%}
                 </div>
@@ -31,8 +35,9 @@
                 <p class="source-title">直播平台</p>
                 <ul class="source-list">
                     {%- for item in lives_num_list %}
-                    <li><a href="{{ source_index_mappings[item.platform] }}">
-                        <img src="/static/img/logo/{{ item.platform }}.jpg">{{ url_source_mappings[item.platform] }}直播
+                    <li><a href="{{ config['SOURCE_INDEX_MAPPINGS'][item.platform] }}">
+                        <img src="/static/img/logo/{{ item.platform }}.jpg">
+                        {{ config['URL_SOURCE_MAPPINGS'][item.platform] }}直播
                         <span>{{ item.lives_num }}个直播</span></a></li>
                     {% endfor -%}
                 </ul>
@@ -90,7 +95,7 @@
     <div class="so-panel clearfix">
         <div class="so-panel-header">
             <span class="so-panel-title">So游戏</span>
-            {%- for label in so_labels['game'] %}
+            {%- for label in config['SO_LABELS']['game'] %}
             <label class="cate-label">{{ label }}</label>
             {% endfor -%}
         </div>
@@ -103,7 +108,7 @@
     <div class="so-panel clearfix">
         <div class="so-panel-header">
             <span class="so-panel-title">So娱乐</span>
-            {%- for label in so_labels['entertainment'] %}
+            {%- for label in config['SO_LABELS']['entertainment'] %}
             <label class="cate-label">{{ label }}</label>
             {% endfor -%}
         </div>
