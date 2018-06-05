@@ -1,9 +1,20 @@
 import os
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+CSRF_ENABLED = True
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+MAX_CONTENT_LENGTH = 3 * 1024 * 1024
+ALLOWED_UPLOAD_TYPES = ('.jpg', '.jpeg', '.png')
 
-url_cate_mappings = {
+SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+                              'mysql://root:123456@127.0.0.1:3306/test'
+SQLALCHEMY_MIGRATE_REPO = 'migrations/pro_migrations'
+
+SO_TIME = 6300
+
+URL_CATE_MAPPINGS = {
     'lol': '英雄联盟',
     'pubg': '绝地求生',
     'wzry': '王者荣耀',
@@ -131,10 +142,8 @@ url_cate_mappings = {
     'qtsy': '其他手游',
     'other': '其他',
 }
-
-cate_url_mappings = {v: k for k, v in url_cate_mappings.items()}
-
-url_source_mappings = {
+CATE_URL_MAPPINGS = {v: k for k, v in URL_CATE_MAPPINGS.items()}
+URL_SOURCE_MAPPINGS = {
     'douyu': '斗鱼',
     'panda': '熊猫',
     'huya': '虎牙',
@@ -143,10 +152,17 @@ url_source_mappings = {
     'zhanqi': '战旗',
     'bilibili': 'bilibili'
 }
-
-source_url_mappings = {v: k for k, v in url_source_mappings.items()}
-
-hot_hosts = [
+SOURCE_URL_MAPPINGS = {v: k for k, v in URL_SOURCE_MAPPINGS.items()}
+SOURCE_INDEX_MAPPINGS = {
+    'douyu': 'https://www.douyu.com',
+    'panda': 'https://www.panda.tv',
+    'huya': 'https://www.huya.com',
+    'longzhu': 'https://www.longzhu.com',
+    'quanmin': 'https://www.quanmin.tv',
+    'zhanqi': 'https://www.zhanqi.tv',
+    'bilibili': 'https://live.bilibili.com'
+}
+HOT_HOSTS = [
     'https://www.panda.tv/666666',
     'https://www.panda.tv/2009',
     'https://www.panda.tv/10015',
@@ -195,69 +211,18 @@ hot_hosts = [
     'https://www.zhanqi.tv/9527',
     'https://www.zhanqi.tv/edgclearlove'
 ]
-
-so_labels = {
+SO_LABELS = {
     'game': ['英雄联盟', '绝地求生', '王者荣耀', '穿越火线', 'DNF', 'DOTA2', '炉石传说'],
     'entertainment': ['户外', '星秀', '星颜', '美食', '音乐', '动漫', '语音直播', '视听点评', '脱口秀'],
     'education': ['教育学习', '科学技术', '金融理财', '军事', '汽车', '正能量']
 }
-
-
-class Config:
-    CSRF_ENABLED = True
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
-    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    # FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
-    # FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
-    # FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
-    MAX_CONTENT_LENGTH = 3 * 1024 * 1024
-    ALLOWED_UPLOAD_TYPES = ('.jpg', '.jpeg', '.png')
-    GLOBAL_TEMPLATE_ARGS = {
-        'recommend': ['英雄联盟', 'DNF', '堡垒之夜'],
-        'categories': {
-            '热门竞技': ['英雄联盟', '绝地求生', '炉石传说', 'DOTA2'],
-            '娱乐联盟': ['户外', '星秀', '美食', '颜值'],
-            '网络游戏': ['DNF', 'QQ飞车', '穿越火线', '堡垒之夜'],
-            '手游专区': ['王者荣耀', '第五人格', '刺激战场', '球球大作战']
-        },
-        'cate_url_mappings': cate_url_mappings
-    }
-    SO_TIME = 6300
-
-    @staticmethod
-    def init_app(app):
-        pass
-
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-    # MAIL_SERVER = 'smtp.googlemail.com'
-    # MAIL_PORT = 587
-    # MAIL_USE_TLS = True
-    # MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-                              'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
-    SQLALCHEMY_MIGRATE_REPO = 'migrations/dev_migrations'
-
-
-class TestingConfig(Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-                              'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
-    SQLALCHEMY_MIGRATE_REPO = 'migrations/test_migrations'
-
-
-class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-                              'mysql://root:123456@127.0.0.1:3306/test'
-    SQLALCHEMY_MIGRATE_REPO = 'migrations/pro_migrations'
-
-
-config = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig,
-    'default': ProductionConfig
-    }
+GLOBAL_TEMPLATE_ARGS = {
+    'recommend': ['英雄联盟', 'DNF', '堡垒之夜'],
+    'categories': {
+        '热门竞技': ['英雄联盟', '绝地求生', '炉石传说', 'DOTA2'],
+        '娱乐联盟': ['户外', '星秀', '美食', '颜值'],
+        '网络游戏': ['DNF', 'QQ飞车', '穿越火线', '堡垒之夜'],
+        '手游专区': ['王者荣耀', '第五人格', '刺激战场', '球球大作战']
+    },
+    'cate_url_mappings': CATE_URL_MAPPINGS
+}

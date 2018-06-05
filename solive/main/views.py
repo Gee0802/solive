@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, abort, jsonify
+from flask import render_template, url_for, flash, redirect, request, abort, jsonify, current_app
 from flask_login import login_required, current_user
 from pyecharts import Bar
 import datetime
@@ -6,10 +6,16 @@ import random
 import json
 
 from . import main
-from .url_cate_mappings import url_cate_mappings, cate_url_mappings, hot_hosts, so_labels, SO_TIME, \
-    source_index_mappings, url_source_mappings
+from .url_cate_mappings import url_cate_mappings, cate_url_mappings, hot_hosts, so_labels, source_index_mappings, url_source_mappings
 from ..exts import db
-from ..models import User, Video, Category
+from ..models import Video
+
+
+@main.before_request
+def before_request():
+    global config, SO_TIME
+    config = current_app.config
+    SO_TIME = config['SO_TIME']
 
 
 @main.route('/')
@@ -18,7 +24,8 @@ def index():
     carousel = Video.query.filter(Video.latest(Video, SO_TIME)).order_by(Video.viewers_num.desc())[:5]
 
     # 各个直播平台直播间个数
-    lives_num_list = sorted(json.load(open('live_crawler/live.json')), key=lambda x: x['lives_num'], reverse=True)
+    with open('live_crawler/live.json') as f:
+        lives_num_list = sorted(json.load(f), key=lambda x: x['lives_num'], reverse=True)
 
     # so主播数据
     host_sample = random.sample(hot_hosts, 12)
@@ -26,7 +33,7 @@ def index():
     for room in host_sample:
         host = Video.query.filter(Video.room == room).first()
         if host is not None:
-            if host.latest(host, 300):
+            if host.latest(host, SO_TIME):
                 hosts.append((host, True))
             else:
                 hosts.append((host, False))
@@ -37,9 +44,8 @@ def index():
                             .filter(Video.cate.in_(so_labels['game'])).order_by(Video.viewers_num.desc())[:8]
     render_so['entertainment'] = Video.query.filter(Video.latest(Video, SO_TIME)) \
                             .filter(Video.cate.in_(so_labels['entertainment'])).order_by(Video.viewers_num.desc())[:8]
-    return render_template('index.html', carousel=carousel, lives_num_list=lives_num_list,
-                           source_index_mappings=source_index_mappings, url_source_mappings=url_source_mappings,
-                           hosts=hosts, render_so=render_so, so_labels=so_labels)
+    return render_template('index.html', carousel=carousel, lives_num_list=lives_num_list,hosts=hosts,
+                           render_so=render_so)
 
 
 @main.route('/chart')
@@ -83,15 +89,9 @@ def show_cate(name, page=1):
     if name not in url_cate_mappings:
         flash('您访问的页面不存在！')
         return redirect(request.referrer or url_for('.cate'))
-    # cate = Category.query.filter_by(name=mappings[name]).first()
-    # if cate is None:
-    #     flash('您访问的页面不存在！')
-    #     return redirect(request.referrer or url_for('.cate'))
-    # pagination = cate.contains.paginate(1, 40, False)
     videos = Video.query.filter_by(parent_cate_name=url_cate_mappings[name]).filter(Video.latest(Video, SO_TIME))\
         .order_by(Video.viewers_num.desc())
     pagination = videos.paginate(page, 40, False)
-    # res = videos.group_by(Video.parent_cate_name)
     return render_template('all.html', title=url_cate_mappings[name], pagination=pagination)
 
 
@@ -99,7 +99,8 @@ def show_cate(name, page=1):
 def search():
     keyword = request.args.get('keyword')
     if keyword is not None:
-        videos = Video.query.filter(db.or_(Video.title.like('%{}%'.format(keyword)), Video.nickname.like('%{}%'.format(keyword))))\
+        videos = Video.query.filter(db.or_(Video.title.like('%{}%'.format(keyword)),
+                                           Video.nickname.like('%{}%'.format(keyword))))\
             .order_by(Video.viewers_num.desc())
         if videos is not None:
             page = int(request.args.get('page') or 1)
