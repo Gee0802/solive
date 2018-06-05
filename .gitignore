@@ -12,3 +12,4 @@ gun_config.py
 migrations/
 bootstrap/
 supervisord.conf
+live.json
