@@ -101,50 +101,37 @@ def search():
     return abort(404)   # TODO
 
 
-@main.route('/user/history')
-@login_required
-def user_history():
-    if current_user.is_authenticated:
-        pagination = current_user.history.paginate(1, 40, False)
-        return render_template('history.html', title='观看历史', pagination=pagination)
-        # TODO
-
-
-@main.route('/user/favorite')
-@login_required
-def user_favorite():
-    if current_user.is_authenticated:
-        pagination = current_user.favorite.paginate(1, 40, False)
-        return render_template('favorite.html', title='我的收藏', pagination=pagination)
-
-
-@main.route('/favorite', methods=['GET', 'POST'])
-@login_required
+@main.route('/favorite', methods=['POST'])
 def favorite():
-    data = request.form
-    video = current_user.favorite.filter(Video.room == data['video']).first()
-    if data['operation'] == '添加收藏':
-        if video is None:
-            video = Video.query.filter(Video.room == data['video']).first()
-            current_user.favorite.append(video)
-            operation = '取消收藏'
-            return jsonify({'operation': operation})
-        error_message = '您已收藏这个房间，请勿重复添加！'
-    elif data['operation'] == '取消收藏':
-        if video:
-            current_user.favorite.remove(video)
-            operation = '添加收藏'
-            return jsonify({'operation': operation})
-        error_message = '您尚未收藏此房间，取消收藏失败！'
-    return jsonify({'message': error_message}), 400
+    if current_user.is_authenticated:
+        data = request.form
+        video = current_user.favorite.filter(Video.room == data['video']).first()
+        if data['operation'] == '添加收藏':
+            if video is None:
+                video = Video.query.filter(Video.room == data['video']).first()
+                current_user.favorite.append(video)
+                operation = '取消收藏'
+                return jsonify({'code': '200', 'operation': operation})
+            error_message = '您已收藏这个房间，请勿重复添加！'
+        elif data['operation'] == '取消收藏':
+            if video is not None:
+                current_user.favorite.remove(video)
+                operation = '添加收藏'
+                return jsonify({'code': '200', 'operation': operation})
+            error_message = '您尚未收藏此房间，取消收藏失败！'
+        else:
+            error_message = '未知的操作！'
+        return jsonify({'code': '400', 'message': error_message})
+    error_message = '请登录！'
+    return jsonify({'code': '401', 'message': error_message})
 
 
-@main.route('/history', methods=['GET', 'POST'])
-@login_required
+@main.route('/history', methods=['POST'])
 def history():
-    data = request.form
-    video = Video.query.filter(Video.room == data['video']).first()
-    if video is not None:
-        if video not in current_user.history:
-            current_user.history.append(video)
+    if current_user.is_authenticated:
+        data = request.form
+        video = Video.query.filter(Video.room == data['video']).first()
+        if video is not None:
+            if video not in current_user.history:
+                current_user.history.append(video)
     return jsonify({})

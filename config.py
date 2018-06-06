@@ -12,7 +12,7 @@ SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
                               'mysql://root:123456@127.0.0.1:3306/test'
 SQLALCHEMY_MIGRATE_REPO = 'migrations/pro_migrations'
 
-SO_TIME = 6300
+SO_TIME = 60
 
 URL_CATE_MAPPINGS = {
     'lol': '英雄联盟',

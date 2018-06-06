@@ -57,7 +57,7 @@ def password():
 def history():
     if current_user.is_authenticated:
         pagination = current_user.history.paginate(1, 40, False)
-        return render_template('history.html', title='观看历史', pagination=pagination)
+        return render_template('user/history.html', title='观看历史', pagination=pagination)
         # TODO
 
 
@@ -65,4 +65,4 @@ def history():
 def favorite():
     if current_user.is_authenticated:
         pagination = current_user.favorite.paginate(1, 40, False)
-        return render_template('favorite.html', title='我的收藏', pagination=pagination)
+        return render_template('user/favorite.html', title='我的收藏', pagination=pagination)
