@@ -1,9 +1,9 @@
 [
-{"lives_num": 22200, "platform": "huya"},
-{"lives_num": 2874, "platform": "longzhu"},
-{"lives_num": 9141, "platform": "bilibili"},
-{"lives_num": 1140, "platform": "quanmin"},
-{"lives_num": 710, "platform": "zhanqi"},
-{"lives_num": 16335, "platform": "douyu"},
-{"lives_num": 5676, "platform": "panda"}
+{"platform": "huya", "lives_num": 14520},
+{"platform": "zhanqi", "lives_num": 617},
+{"platform": "bilibili", "lives_num": 6121},
+{"platform": "douyu", "lives_num": 12245},
+{"platform": "quanmin", "lives_num": 1020},
+{"platform": "panda", "lives_num": 4376},
+{"platform": "longzhu", "lives_num": 2209}
 ]
