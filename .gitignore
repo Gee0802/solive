@@ -13,3 +13,7 @@ migrations/
 bootstrap/
 supervisord.conf
 *.json
+tasks.py
+celerybeat-schedule
+celerybeat.pid
+dump.rdb
