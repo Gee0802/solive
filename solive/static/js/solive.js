@@ -127,17 +127,19 @@ $(".video-favorite").click(function (event) {
         type: 'post',
         url: '/favorite',
         data: {
-            video: $(this).data('room'),
-            operation: $(this).text()
+            video: $(self).data('room'),
+            operation: $(self).text()
         },
         success: function (result) {
-            $(self).text(result.operation);
+            if(result.code == 200) {
+                $(self).text(result.operation);
+            }
         }
     });
 });
 
 // 添加观看历史
-$(".video-box").click(function (event) {
+$(".video-box .thumbnail").click(function (event) {
     var self = this;
     $.ajax({
         type: 'post',

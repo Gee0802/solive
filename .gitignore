@@ -12,7 +12,7 @@ gun_config.py
 migrations/
 bootstrap/
 supervisord.conf
-<<<<<<< HEAD
+*.json
 tasks.py
 celerybeat-schedule
 celerybeat.pid
