@@ -9,6 +9,7 @@ from ..exts import db
 @api.route('/videos/hosts')
 def get_hosts():
     args = request.args
+    print(args)
     if args['source'] == '全部':
         clause1 = True
     else:

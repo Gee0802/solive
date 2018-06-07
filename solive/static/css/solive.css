@@ -325,21 +325,29 @@ a:focus {
     font-size: 30px;
     color: green;
 }
-.so-form {
+.so-control {
     display: inline-block;
-    font-size: 10px;
+    font-size: 14px;
     margin-left: 10%;
 }
-.so-form-group {
+.so-group {
     display: inline-block;
     margin-right: 10px;
 }
-.so-form-group label {
+.so-group label {
     margin: 0;
 }
-.so-form input {
-    padding: 0;
-    line-height: normal;
+.so-select {
+    border: 2px solid green;
+    border-radius: 14px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+}
+.so-select:hover {
+    cursor: pointer;
+    color: white;
+    background-color: green;
 }
 .so-panel-body {
     margin-top: 10px;
@@ -403,7 +411,11 @@ a:focus {
     color: white;
     background-color: green;
 }
-
+.selected {
+    cursor: pointer;
+    color: white;
+    background-color: green;
+}
 .cate-box {
     width: 25%;
     padding: 0 15px;
@@ -489,6 +501,9 @@ a:focus {
     display: block;
     width: 80%;
     margin: auto;
+}
+*:focus {
+    outline: none !important;
 }
 @media (min-width: 768px) {
     .solive-container {

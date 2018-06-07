@@ -47,10 +47,10 @@
     <div class="so-panel clearfix">
         <div class="so-panel-header">
             <span class="so-panel-title">So主播</span>
-            <form id="so-host-form" class="so-form">
-                <div class="so-form-group">
-                    <label for="so-host-source">平台</label>
-                    <select id="so-host-source" name="source" class="so-form-control">
+            <div id="so-control" class="so-control">
+                <div class="so-group">
+                    <label for="select-source">平台</label>
+                    <select id="select-source" name="source" class="so-select">
                         <option>全部</option>
                         <option>斗鱼</option>
                         <option>熊猫</option>
@@ -61,9 +61,9 @@
                         <option>bilibili</option>
                     </select>
                 </div>
-                <div class="so-form-group">
-                    <label for="so-host-cate">分类</label>
-                    <select id="so-host-cate" name="cate" class="so-form-control">
+                <div class="so-group">
+                    <label for="select-cate">分类</label>
+                    <select id="select-cate" name="cate" class="so-select">
                         <option>全部</option>
                         <option>英雄联盟</option>
                         <option>绝地求生</option>
@@ -74,8 +74,7 @@
                         <option>炉石传说</option>
                     </select>
                 </div>
-                <input type="submit" value="搜索">
-            </form>
+            </div>
         </div>
         <div class="so-panel-body">
             <div class="so-list">
@@ -85,8 +84,8 @@
                         <span title="{{ item[0].nickname }}">{{ item[0].nickname }}</span>
                         {% if item[1] %}<i class="badge">live</i>{% endif %}
                     </div>
-                    <span class="host-cate">{{ item[0].cate }}</span>
-                    <span class="host-source">{{ item[0].source }}</span>
+                    <span class="host-cate" title="{{ item[0].cate }}">{{ item[0].cate }}</span>
+                    <span class="host-source" title="{{ item[0].source }}">{{ item[0].source }}</span>
                 </a>
                 {% endfor -%}
             </div>

@@ -73,23 +73,25 @@ $("#register-form").submit(function (event) {
 });
 
 // so主播
-$("#so-host-form").submit(function (event) {
-    event.preventDefault();
+$(".so-control").change(function (event) {
     $.ajax({
         type: 'get',
         url: '/api/videos/hosts',
-        data: $("#so-host-form").serialize()
+        data: {
+            'source': $("#select-source").val(),
+            'cate': $("#select-cate").val()
+        }
     }).done(function (result) {
         $(".so-list").empty();
         $.each(result.data, function () {
             $(".so-list").append(
-                `<a href="${this.room}"${this.is_live?' class="live"':''}>
+                `<a href="${this.room}" target="_blank"${this.is_live?' class="live"':''}>
                     <div class="host-name">
                         <span title="${this.nickname}">${this.nickname}</span>
                         ${this.is_live?'<i class="badge">live</i>':''}
                     </div>
-                    <span class="host-cate">${this.cate}</span>
-                    <span class="host-source">${this.source}</span>
+                    <span class="host-cate" title="${this.cate}">${this.cate}</span>
+                    <span class="host-source" title="${this.source}">${this.source}</span>
                 </a>`
             );
         });
@@ -98,6 +100,8 @@ $("#so-host-form").submit(function (event) {
 
 // 渲染so游戏、so娱乐等栏目
 $(".cate-label").click(function (event) {
+    $(event.target).siblings().removeClass('selected');
+    $(event.target).addClass('selected');
     var self = this;
     $.ajax({
         type: 'get',
