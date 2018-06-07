@@ -17,3 +17,4 @@ tasks.py
 celerybeat-schedule
 celerybeat.pid
 dump.rdb
+*.json
