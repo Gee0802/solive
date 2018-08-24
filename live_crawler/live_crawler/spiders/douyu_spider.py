@@ -9,7 +9,7 @@ class douyuSpider(CrawlSpider):
     name = 'douyu'
     start_urls = ['https://www.douyu.com/directory']
     rules = (
-        Rule(LinkExtractor(allow=('/game/\w+',)), callback='parse_cate'),
+        Rule(LinkExtractor(allow=('/g_\w+',)), callback='parse_cate'),
     )
 
     def parse_cate(self, response):

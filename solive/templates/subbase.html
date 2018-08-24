@@ -44,14 +44,14 @@
         {%- for category, lst in categories.items() %}
         <div class="sidebar-category">
             <div class="sidebar-category-name">
-                <a href="#">{{ category }}</a>
+                <a href="###">{{ category }}</a>
                 <div class="triangle-btn" data-toggle="collapse" data-target="#cate-{{ loop.index }}">
                     <span class="caret"></span>
                 </div>
             </div>
             <div class="collapse sidebar-subcate" id="cate-{{ loop.index }}">
                 {%- for item in lst %}
-                <a href="{{ cate_url_mappings[item] }}">{{ item }}</a>
+                <a href="/cate/{{ cate_url_mappings[item] }}">{{ item }}</a>
                 {% endfor -%}
             </div>
         </div>
