@@ -19,7 +19,7 @@ class quanminSpider(CrawlSpider):
             item['room'] = 'https:' + room.xpath('./div/div/a[1]/@href').extract_first()
             item['nickname'] = room.xpath('./div/div/a[1]/div[3]/div/div/span[1]/text()').extract_first()
             item['title'] = room.xpath('./div/div/a[1]/div[3]/div/p/text()').extract_first()
-            item['cover'] = room.xpath('./div/div/a[1]/div[1]/img/@src').extract_first()
+            item['cover'] = room.xpath('./div/div/a[1]/div[1]/picture/img/@src').extract_first()
             item['viewers_num'] = room.xpath('./div/div/a[1]/div[3]/div/div/span[2]/text()').extract_first()
             item['cate'] = room.xpath('./div/div/a[2]/text()').extract_first()
             yield item
