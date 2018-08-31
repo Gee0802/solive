@@ -17,7 +17,10 @@ class pandaSpider(CrawlSpider):
         for room in room_items[1:]:
             item = roomItem()
             item['source'] = self.name
-            item['room'] = 'https://www.panda.tv' + room.xpath('./a/@href').extract_first()
+            try:
+                item['room'] = 'https://www.panda.tv' + room.xpath('./a/@href').extract_first()
+            except TypeError:
+                continue
             item['nickname'] = room.xpath('./a/div[2]/span[2]/@title').extract_first()
             item['title'] = room.xpath('./a/div[2]/span[1]/@title').extract_first()
             item['cover'] = room.xpath('./a/div[1]/img/@data-original').extract_first()
