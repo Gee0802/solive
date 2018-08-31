@@ -21,7 +21,7 @@ class pandaSpider(CrawlSpider):
             item['nickname'] = room.xpath('./a/div[2]/span[2]/@title').extract_first()
             item['title'] = room.xpath('./a/div[2]/span[1]/@title').extract_first()
             item['cover'] = room.xpath('./a/div[1]/img/@data-original').extract_first()
-            item['cate'] = room.xpath('./div/div/a[1]/text()').extract_first().strip()
+            item['cate'] = (room.xpath('./div/div/a[1]/text()').extract_first() or '').strip()
             viewers_num = room.xpath('./a/div[2]/span[3]/text()').extract_first()
             try:
                 item['viewers_num'] = str(float(viewers_num[:-1]) * 10000) if '万' in viewers_num else viewers_num

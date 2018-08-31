@@ -11,7 +11,9 @@
             </span>
             <span class="video-nickname" title="{{ video.nickname }}">{{ video.nickname }}</span>
             <span class="video-category" title="{{ video.cate }}">{{ video.cate }}</span>
-            <span class="video-source" title="{{ video.source }}直播">{{ video.source }}直播</span>
+            <span class="video-source" title="{{ config['URL_SOURCE_MAPPINGS'][video.source] }}直播">
+                {{ config['URL_SOURCE_MAPPINGS'][video.source] }}直播
+            </span>
         </div>
     </a>
     <a href="###" class="video-favorite" data-room="{{ video.room }}">
