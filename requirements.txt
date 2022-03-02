@@ -61,7 +61,7 @@ pytz==2018.3
 # pywin32==223
 queuelib==1.5.0
 requests==2.18.4
-Scrapy==1.5.0
+Scrapy==1.8.2
 scrapy-sqlitem==0.1.2
 service-identity==17.0.0
 six==1.11.0
